@@ -22,10 +22,12 @@ class JwtRequestFilter(private val customUserDetailsService: CustomUserDetailsSe
         val authorizationHeader = request.getHeader("Authorization")
         var username: String? = null
         var jwt: String? = null
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7)
             username = jwtUtil.extractUsername(jwt)
         }
+
         val authentication = SecurityContextHolder.getContext().authentication
         if (username != null && authentication == null) {
             val userDetails = customUserDetailsService.loadUserByUsername(username)

@@ -1,5 +1,6 @@
-package com.example.demo.model
+package com.example.demo.model.common
 
+import com.example.demo.model.table.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

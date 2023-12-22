@@ -1,9 +1,10 @@
 package com.example.demo.controller
 
+import com.example.demo.common.CommonUtil
 import com.example.demo.common.ResourceNotFoundException
-import com.example.demo.model.Cat
+import com.example.demo.model.request.CatRequest
+import com.example.demo.model.table.Cat
 import com.example.demo.repository.CatRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -13,12 +14,12 @@ class CatController(private val catRepository: CatRepository) {
 
     @GetMapping
     fun getAllCats(): ResponseEntity<Iterable<Cat>> {
-        return ResponseEntity.ok(catRepository.findAll())
+        return ResponseEntity.ok(catRepository.findAllByUserId(CommonUtil.getUserId()))
     }
 
     @GetMapping("/{id}")
     fun getCat(@PathVariable id: Int): ResponseEntity<Cat> {
-        val cat = catRepository.findByIdOrNull(id)
+        val cat = catRepository.findByIdAndUserId(id, CommonUtil.getUserId())
 
         return if (cat != null) {
             ResponseEntity.ok(cat)
@@ -28,26 +29,33 @@ class CatController(private val catRepository: CatRepository) {
     }
 
     @PostMapping
-    fun createCat(@RequestBody cat: Cat): ResponseEntity<Void> {
+    fun createCat(@RequestBody catRequest: CatRequest): ResponseEntity<Void> {
+        val userId: Int = CommonUtil.getUserId()
+        val cat = Cat(
+            userId = userId,
+            breed = catRequest.breed,
+            picture = catRequest.picture,
+        )
         catRepository.save(cat)
 
         return ResponseEntity.ok().build()
     }
 
-    @PutMapping("cats/{id}")
-    fun updateCat(@PathVariable id: Int, @RequestBody catDetails: Cat): ResponseEntity<Void> {
-        val cat = catRepository.findById(id)
-                .orElseThrow { ResourceNotFoundException("Cat not found with id $id") }!!
-        cat.breed = catDetails.breed
-        cat.picture = catDetails.picture
+    @PutMapping("/{id}")
+    fun updateCat(@PathVariable id: Int, @RequestBody catRequest: CatRequest): ResponseEntity<Void> {
+        val cat = catRepository.findByIdAndUserId(id, CommonUtil.getUserId())
+            ?: throw ResourceNotFoundException("Cat not found with id $id")
+
+        cat.breed = catRequest.breed
+        cat.picture = catRequest.picture
         catRepository.save(cat)
-        
+
         return ResponseEntity.ok().build()
     }
 
     @DeleteMapping("/{id}")
     fun deleteCat(@PathVariable id: Int): ResponseEntity<Void> {
-        return if (catRepository.existsById(id)) {
+        return if (catRepository.existsCatByIdAndUserId(id, CommonUtil.getUserId())) {
             catRepository.deleteById(id)
             ResponseEntity.ok().build()
         } else {
