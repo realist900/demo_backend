@@ -8,7 +8,6 @@ import com.example.demo.model.table.User
 import com.example.demo.repository.UserRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 
@@ -17,7 +16,6 @@ class AuthController(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtUtil: JwtUtil,
-    private val userDetailsService: UserDetailsService
 ) {
     @PostMapping("/register")
     fun registerUser(@RequestBody user: User): ResponseEntity<Void> {

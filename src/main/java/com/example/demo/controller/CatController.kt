@@ -3,18 +3,27 @@ package com.example.demo.controller
 import com.example.demo.common.CommonUtil
 import com.example.demo.common.ResourceNotFoundException
 import com.example.demo.model.request.CatRequest
+import com.example.demo.model.response.PagingData
 import com.example.demo.model.table.Cat
 import com.example.demo.repository.CatRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/cats")
 class CatController(private val catRepository: CatRepository) {
 
     @GetMapping
-    fun getAllCats(): ResponseEntity<Iterable<Cat>> {
-        return ResponseEntity.ok(catRepository.findAllByUserId(CommonUtil.getUserId()))
+    fun getCats(
+        @RequestParam(value = "offset", defaultValue = "0") offset: Int,
+        @RequestParam(value = "limit", defaultValue = "20") limit: Int
+    ): ResponseEntity<PagingData<Cat>> {
+        val userId = CommonUtil.getUserId()
+        val cats = catRepository.findCatsWithLimitAndOffset(userId, limit, offset)
+        val total = catRepository.countCatsByUserId(userId)
+        return ResponseEntity.ok(PagingData(values = cats, total = total))
     }
 
     @GetMapping("/{id}")
@@ -30,11 +39,14 @@ class CatController(private val catRepository: CatRepository) {
 
     @PostMapping
     fun createCat(@RequestBody catRequest: CatRequest): ResponseEntity<Void> {
+        val created = LocalDateTime.parse(catRequest.created, DateTimeFormatter.ISO_DATE_TIME)
         val userId: Int = CommonUtil.getUserId()
+
         val cat = Cat(
             userId = userId,
             breed = catRequest.breed,
             picture = catRequest.picture,
+            created = created,
         )
         catRepository.save(cat)
 

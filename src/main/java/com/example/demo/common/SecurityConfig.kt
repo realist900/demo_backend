@@ -23,12 +23,12 @@ open class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
     @Throws(Exception::class)
     open fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
-                .authorizeHttpRequests { requests: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry ->
-                    requests
-                            .requestMatchers("/login", "/register").permitAll()
-                            .anyRequest().authenticated()
-                }
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .authorizeHttpRequests { requests: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry ->
+                requests
+                    .requestMatchers("/login", "/register").permitAll()
+                    .anyRequest().authenticated()
+            }
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 }

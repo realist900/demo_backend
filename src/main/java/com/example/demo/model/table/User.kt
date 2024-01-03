@@ -14,3 +14,4 @@ class User(
     var email: String? = null,
     var isActive: Boolean = false,
 )
+
