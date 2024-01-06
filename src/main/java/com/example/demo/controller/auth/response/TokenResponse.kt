@@ -1,4 +1,4 @@
-package com.example.demo.model.response
+package com.example.demo.controller.auth.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

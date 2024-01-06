@@ -1,9 +1,9 @@
-package com.example.demo.controller
+package com.example.demo.controller.cat
 
 import com.example.demo.common.CommonUtil
 import com.example.demo.common.ResourceNotFoundException
-import com.example.demo.model.request.CatRequest
-import com.example.demo.model.response.PagingData
+import com.example.demo.controller.cat.request.CatRequest
+import com.example.demo.model.common.PagingData
 import com.example.demo.model.table.Cat
 import com.example.demo.repository.CatRepository
 import org.springframework.http.ResponseEntity

@@ -17,7 +17,6 @@ class JwtUtil {
 
     @PostConstruct
     fun init() {
-        // Генерация безопасного ключа. Предполагается, что SECRET_ENV_VARIABLE - это переменная среды с безопасным ключом.
         val secretKeyBytes = System.getenv("SECRET_ENV_VARIABLE").toByteArray()
         SECRET_KEY = Keys.hmacShaKeyFor(secretKeyBytes)
     }

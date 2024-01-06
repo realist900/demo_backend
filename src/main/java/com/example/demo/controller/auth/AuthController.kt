@@ -1,9 +1,9 @@
-package com.example.demo.controller
+package com.example.demo.controller.auth
 
 import com.example.demo.common.JwtUtil
+import com.example.demo.controller.auth.response.TokenResponse
+import com.example.demo.controller.auth.response.UserResponse
 import com.example.demo.model.common.CustomUserDetails
-import com.example.demo.model.response.TokenResponse
-import com.example.demo.model.response.UserResponse
 import com.example.demo.model.table.User
 import com.example.demo.repository.UserRepository
 import org.springframework.http.ResponseEntity

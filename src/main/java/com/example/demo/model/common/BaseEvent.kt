@@ -1,4 +1,4 @@
-package com.example.demo.model.websocket_event
+package com.example.demo.model.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

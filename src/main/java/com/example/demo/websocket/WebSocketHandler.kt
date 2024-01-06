@@ -18,7 +18,6 @@ class WebSocketHandler : TextWebSocketHandler() {
         val userId = session.attributes["userId"] as Int
 
         sessions[userId] = session
-        //sessions[getUserId()] = session
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
